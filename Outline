@@ -1,0 +1,76 @@
+class Character
+	Fields
+  	HP
+    Name
+    Race
+    Equipment: {
+    	Wepaon/Spell: Object
+      Armor: Object
+    }
+  Methods
+  	destroy()
+
+class Elves
+  Fields
+		
+fighter > rogue > mage > fighter
+
+
+class NPC extends Character
+	Fields
+  	EvilMeter
+	Methods
+  	attack() => number
+    	equipment
+
+MageArmor 0 defense physical attacks
+BattleArmor great phyiscal defence no magic defense
+
+class Armor
+	Fields
+  	BaseDefense: Integer
+  	DefenseModifier: {
+    	Pierce: % bonus 0-1
+      Blunt: % bonus 0-1
+      Slash: % bonus 0-1
+      Magic: % reduction 0.2 150 
+    }
+
+class Weapon/Spell
+	Fields
+  	DamageType: [Blunt, Slash, Pierce, Magic]
+    BaseDamage: (min, max) (8, 10) roll this first 9 + 5% = 
+    CriticalHitRatio: 0 - 1 
+		Durability: 0 - 100
+    Scaling: {
+    	Strength: 0 - 1
+      Dexterity: 0 - 1
+      Intelligence: 0 - 1
+    }
+    Requirement: {
+    	Str:
+      Int:
+      Dex:
+    }
+  Method
+  	getDamage() rand = this.min to this.maxk
+
+class PlayableCharacer extends Character
+	Fields
+		Name: String
+		Gender: String
+    Strength: 0 - 100 
+    Intelligence: 0 - 100
+    Dexterity: 0 - 100 
+    Adrenaline: 0 - 1
+  Methods
+  	attack(weapon/spell, enemy) => number = damage
+    	baseDamage = weapon.getDamage()
+      if weapon.damagetype = pierce or slash then 
+      	totalDamage = (strength * str scaling) + (dexterity * dex scaling) * baseDamage
+      else totalDamage = intelligence * baseDamage
+      if rand < (weapon.criticalHitRatio + this.adrenaline) then totalDamage *= 1.2
+      if rand < weapon.missRatio * dexterity
+
+protagonist = new PC ({ race: new Race('Elves')})
+human.baseAttack
