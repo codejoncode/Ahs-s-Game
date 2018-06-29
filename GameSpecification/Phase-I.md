@@ -27,6 +27,10 @@ in a file named after the name of the class.
 any means necessary. In order to keep the specification simple, the use
 of `this` is avoided.
 
+All the files are to be placed inside `src` folder from the root of
+the repository for example the Character.js will go into
+`/src/Gameplay/Character.js`
+
 ### Character
 
 filename: `Gameplay/Character.js`
@@ -91,9 +95,7 @@ specific to this class. For the sake of brevity, only those attributes
 which are specific to the class are mentioned here. If you see a method
 with the same name as the parent class, that means the method is being overridden.
 The inventory object will contain the list of available weapons and
-armor pieces for the player, as `id`s of the objects. This `id` is looked
-up to create an actual object when they are equipped. See `ModuleSystem`
-below for more details.
+armor pieces for the player, as `Weapon` and `ArmorPiece` objects (See below).
 
 ```
 class PlayerCharacter extends Character
@@ -101,8 +103,8 @@ class PlayerCharacter extends Character
     adrenaline: int
     pointsAvailableForLevelUp: int
     inventory: {
-      weapons: [int],
-      armor: [int]
+      weapons: [Weapon],
+      armor: [ArmorPiece]
     }
   Methods
     attack() => { type: int, damage: int }
@@ -111,7 +113,7 @@ class PlayerCharacter extends Character
       actualDamage = baseDamage * rand(
         currentEquipment.weapon.criticalHitFactor + adrenline * 0.5
       )
-      accuracy = currentEquipment.weapon.accuracy * (1 + stats.dexterity/100)
+      accuracy = currentEquipment.weapon.accuracy * (stats.dexterity/1000)
       if rand <= accuracy
         return { type: baseAttack.type, damage: actualDamage }
       else
@@ -129,4 +131,47 @@ class PlayerCharacter extends Character
       stats.strength += addlPoints.strength
       stats.intelligence += addlPoints.intelligence
       stats.dexterity += addlPoints.dexterity
+```
+
+### NonPlayerCharacter
+
+filename: `Gameplay/NonPlayerCharacter.js`
+
+The NPCs are various characters that the player will encounter in the world
+and interact to trigger various events and battles. This is mainly a feature
+for Phase II of the project, hence there is no specification for this class.
+
+### Weapon
+
+filename: `Gameplay/Weapon.js`
+
+The weapon class constructs objects that come from the `ModuleSystem` (see
+below).
+
+```
+class Weapon
+  Fields
+    id: int
+    name: string
+    baseDamage: int
+    damageType: int
+    criticalHitRatio: float 0 - 1
+    crticalHitFactor: float 1+
+    durability: Phase II
+    scaling: {
+      strength: float[0, 0.15, 0.30, 0.45]
+      dexterity: float[0, 0.15, 0.30, 0.45]
+      intelligence: float[0, 0.15, 0.30, 0.45]
+    }
+    accuracy: float 0 - 1
+    requirement: Phase II
+  Methods
+    getDamage(stats) => int
+      strengthBonus = 1;
+      for(i = 1; i < stats.strength; i++))
+        strengthBonus += 1 / (i + 1);
+      strengthBonus *= scaling.strength
+      likewise for intelligence and dexterity
+      totalDamage = Math.floor(baseDamage * (1 + strengthBonus + dexBonus + intBonus ))
+      return totalDamage
 ```
